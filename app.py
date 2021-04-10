@@ -33,32 +33,37 @@ def index():
 
 @app.route('/issueBook/<id>', methods=['GET', 'POST'])
 def issueBook(id):
-	sql=''' SELECT TITLE, AUTHOR, AVERAGERATING FROM BOOKS WHERE BOOKID= '''+ id
+	sql=' SELECT TITLE, AUTHOR, AVERAGERATING FROM BOOKS WHERE BOOKID= '+ id
 	results = executeSelect(sql)
-	insert=3
+	insert=4
 	debt=[]
 
 	if request.method == 'POST':
-		sql='SELECT DEBT FROM MEMBERS WHERE memberId='+ request.form['memberId']
-		debt=executeSelect(sql)
-		if debt:
-			if debt[0][0] < 500:
-				t=[]
-				t.append(id)
-				t.append(request.form['memberId'])
-				t.append(date.today().strftime("%Y/%m/%d"))
-				t.append((date.today()+timedelta(days=10)).strftime("%Y/%m/%d"))
-				t.append(50)
-				sql='INSERT INTO transactions(bookId,memberId,issueDate,expectedReturnDate,rent) VALUES {} '.format(tuple(t))
-				sqlupdate='UPDATE BOOKS SET AVAILABLEQUANTITY=AVAILABLEQUANTITY-1 WHERE BOOKID='+id
-				if (executeIUD(sql) and executeIUD(sqlupdate)):
-					insert=0
-				else:
-					insert=1
-			else:
-				debt=True
+		sqlCheck='SELECT * FROM TRANSACTIONS WHERE BOOKID='+id+' AND MEMBERID='+request.form['memberId']+' AND RETURNDATE=\'0000-00-00\''
+		resultsCheck = executeSelect(sqlCheck)
+		if resultsCheck:
+			insert=3
 		else:
-			insert=2
+			sql='SELECT DEBT FROM MEMBERS WHERE memberId='+ request.form['memberId']
+			debt=executeSelect(sql)
+			if debt:
+				if debt[0][0] < 500:
+					t=[]
+					t.append(id)
+					t.append(request.form['memberId'])
+					t.append(date.today().strftime("%Y/%m/%d"))
+					t.append((date.today()+timedelta(days=10)).strftime("%Y/%m/%d"))
+					t.append(50)
+					sql='INSERT INTO transactions(bookId,memberId,issueDate,expectedReturnDate,rent) VALUES {} '.format(tuple(t))
+					sqlupdate='UPDATE BOOKS SET AVAILABLEQUANTITY=AVAILABLEQUANTITY-1 WHERE BOOKID='+id
+					if (executeIUD(sql) and executeIUD(sqlupdate)):
+						insert=0
+					else:
+						insert=1
+				else:
+					debt=True
+			else:
+				insert=2
 	return render_template('issueBook.html', results=results, debt=debt, insert=insert)
 
 @app.route('/returnBook', methods=['GET', 'POST'])
@@ -71,7 +76,7 @@ def returnBook():
 	
 	if request.method == 'POST':
 		if 'form1' in request.form:
-			sql='SELECT ID,TITLE,AUTHOR,NAME,ISSUEDATE,expectedReturnDate,rent,DEBT FROM books JOIN transactions ON books.bookId=transactions.bookId JOIN members ON transactions.memberId=members.memberId WHERE transactions.bookId='+ request.form['bookId'] +' AND transactions.memberId=' + request.form['memberId']
+			sql='SELECT ID,TITLE,AUTHOR,NAME,ISSUEDATE,expectedReturnDate,rent,DEBT FROM books JOIN transactions ON books.bookId=transactions.bookId JOIN members ON transactions.memberId=members.memberId WHERE transactions.bookId='+ request.form['bookId'] +' AND transactions.memberId=' + request.form['memberId'] + ' AND RETURNDATE=\'0000-00-00\''
 			results = executeSelect(sql)
 			if results:
 				if date.today() > results[0][5]:
@@ -91,7 +96,7 @@ def returnBook():
 			remDebt = int(request.form['totalA']) - int(request.form['totalAmountCollected'])
 			sqlUpdateMem = 'UPDATE MEMBERS SET DEBT='+str(remDebt)+' ,AMOUNTPAID=AMOUNTPAID+'+ request.form['totalAmountCollected'] +' WHERE MEMBERID=' +str(results[0][0])
 			sqlUpdateBook = 'UPDATE BOOKS SET AVAILABLEQUANTITY=AVAILABLEQUANTITY+1 WHERE BOOKID=' +str(results[0][1])
-			if (executeIUD(sql) and executeIUD(sqlUpdateMem) and executeIUD(sqlUpdateBook)): #-----------
+			if (executeIUD(sql) and executeIUD(sqlUpdateMem) and executeIUD(sqlUpdateBook)): 
 				update=True
 			else:
 				update=False

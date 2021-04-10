@@ -16,8 +16,13 @@
   <input type="text" class="form-control" aria-describedby="basic-addon1" name="memberId">
 </div>
 	      <button class="btn btn-primary">Issue</button>
+	      {% if insert==3 %}
+	      <div class="alert alert-danger" role="alert">
+  This member already has a copy of this book
+</div>
+{% endif %}
 	      {% if insert==2 %}
-	      <div class="alert alert-success" role="alert">
+	      <div class="alert alert-danger" role="alert">
   No member with this Member ID
 </div>
 {% endif %}
