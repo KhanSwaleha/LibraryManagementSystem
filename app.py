@@ -99,17 +99,23 @@ def returnBook():
 
 @app.route('/reports', methods = ['POST', 'GET'])
 def reports():
+	exist = False
 	sql = 'SELECT TRANSACTIONS.BOOKID, COUNT(TRANSACTIONS.BOOKID) AS FREQUENCY, AVAILABLEQUANTITY FROM TRANSACTIONS JOIN BOOKS ON TRANSACTIONS.BOOKID=BOOKS.BOOKID GROUP BY TRANSACTIONS.BOOKID ORDER BY FREQUENCY DESC'
 	results = executeSelect(sql)
 	sqlMem = 'SELECT NAME,AMOUNTPAID FROM MEMBERS WHERE DEBT < 10 ORDER BY AMOUNTPAID DESC'
 	resultsMem = executeSelect(sqlMem)
-	return render_template('reports.html', results=results, resultsMem=resultsMem)
+	if (results and resultsMem):
+		exist = True
+	return render_template('reports.html', results=results, resultsMem=resultsMem, exist=exist)
 
 @app.route('/transactions')
 def transactions():
+	exist = False
 	sql= 'SELECT ID,TITLE,AUTHOR,NAME,ISSUEDATE,RETURNDATE,EXPECTEDRETURNDATE,TOTALAMOUNTCOLLECTED FROM books JOIN transactions ON books.bookId=transactions.bookId JOIN members ON transactions.memberId=members.memberId'
 	results = executeSelect(sql)
-	return render_template('transactions.html', results=results)
+	if results:
+		exist = True
+	return render_template('transactions.html', results=results, exist=exist)
 
 if __name__ == '__main__':
 	app.run(debug=True)
