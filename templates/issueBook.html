@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+	<div style="margin-top: 20px">
+		<form method="POST">
+			{% for i in results %}
+		<main role="main" class="container" style="width: 50%; float:left">
+	      <h1 class="mt-5">{{ i[0] }}</h1>
+	      <p class="lead">Authors: {{ i[1] }}</p>
+	      <p>Rating: {{ i[2] }}</p>
+	    </main>
+	    <main role="main" class="container" style="width: 50%; float:right">
+	      <h4 class="mt-5">Issue to member :-</h4>
+	      <div class="input-group mb-3">
+  <span class="input-group-text" id="basic-addon1">ID :</span>
+  <input type="text" class="form-control" aria-describedby="basic-addon1" name="memberId">
+</div>
+	      <button class="btn btn-primary">Issue</button>
+	      {% if insert==2 %}
+	      <div class="alert alert-success" role="alert">
+  No member with this Member ID
+</div>
+{% endif %}
+	      {% if insert==0 %}
+	      <div class="alert alert-success" role="alert">
+  Issued Successfully
+</div>
+{% endif %}
+	      {% if insert==1 %}
+	      <div class="alert alert-danger" role="alert">
+  Issue of book not successful
+</div>
+{% endif %}
+{% if debt==True %}
+<div class="alert alert-danger" role="alert">
+  Member debt greater than 500
+</div>
+{% endif %}
+	    </main>
+	    {% endfor %}
+	    </form>
+	</div>
+
+{% endblock %}

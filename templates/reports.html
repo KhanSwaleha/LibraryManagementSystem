@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+    <div id="books" style="margin-top: 20px; width: 100%; height: 500px"></div>
+    <div id="member" style="margin-top: 50px; width: 100%; height: 500px"></div>
+    
+
+
+
+  <script>
+        anychart.onDocumentReady(function() {
+ 
+        // set the data
+        var data = {
+            header: ["Book Name", "No. of times issued"],
+            rows: [
+              ['Book ID: {{ results[0][0] }} Quantity: {{ results[0][2] }}', '{{ results[0][1] }}'],
+              ['Book ID: {{ results[1][0] }} Quantity: {{ results[1][2] }}', '{{ results[1][1] }}'],
+              ['Book ID: {{ results[2][0] }} Quantity: {{ results[2][2] }}', '{{ results[2][1] }}']
+        ]};
+ 
+        // create the chart
+        var chart = anychart.column();
+ 
+        // add the data
+        chart.data(data);
+ 
+        // set the chart title
+        chart.title("Most issued books with their available quantity");
+ 
+        // draw
+        chart.container("books");
+        chart.draw();
+
+
+        // set the data
+        var memData = {
+            header: ["Member name", "Amount paid till date"],
+            rows: [
+              ['{{ resultsMem[0][0] }}', '{{ resultsMem[0][1] }}'],
+              ['{{ resultsMem[1][0] }}', '{{ resultsMem[1][1] }}'],
+              ['{{ resultsMem[2][0] }}', '{{ resultsMem[2][1] }}']
+        ]};
+ 
+        // create the chart
+        var memChart = anychart.column();
+ 
+        // add the data
+        memChart.data(memData);
+ 
+        // set the chart title
+        memChart.title("Highest paying customers");
+ 
+        // draw
+        memChart.container("member");
+        memChart.draw();
+      });
+    </script>
+{% endblock %}

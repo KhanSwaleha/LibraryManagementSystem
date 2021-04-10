@@ -1,0 +1,62 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+	<form method="POST">
+	<div style="margin-top: 20px; width: 100%">
+		<div class="input-group mb-3" style="float: left; width: 40%; padding-right: 10px">
+  <span class="input-group-text" id="basic-addon1">Book ID :</span>
+  <input type="text" class="form-control" aria-describedby="basic-addon1" name="bookId">
+</div>
+<div class="input-group mb-3" style="float: left; width: 40%; padding-right: 10px">
+  <span class="input-group-text" id="basic-addon1">Member ID :</span>
+  <input type="text" class="form-control" aria-describedby="basic-addon1" name="memberId">
+</div>
+<div style="float: right; width: 20%">
+	<button class="btn btn-primary" name="form1">Submit</button>
+	{% if exist==False %}
+	      <div class="alert alert-success" role="alert">
+  No such transaction available
+</div>
+{% endif %}
+</div>
+	</div>
+
+	<div style="margin-top: 20px">
+		
+		{% for i in results %}
+		<main role="main" class="container" style="width: 50%; float:left">
+	      <h1 class="mt-5">{{ i[1] }}</h1>
+	      <p>Authors: {{ i[2] }}</p>
+	      <p>Member name: {{ i[3] }}</p>
+	      <p>Issue Date: {{ i[4] }}</p>
+	      <p>Expected Return Date: {{ i[5] }}</p>
+	      <p>Rent: {{ i[6] }}</p>
+	      <p>Fine for late return: {{ fine }}</p>
+	      <p>Member's previous debt: {{ i[7] }}</p>
+	    </main>
+	    <main role="main" class="container" style="width: 50%; float:right">
+	      <h4 class="mt-5">Total amount to collect: {{ total }}</h4>
+	      <input name="totalA" value="{{ total }}" hidden>
+	      <input name="transID" value="{{ i[0] }}" hidden>
+	      
+	      <p>Enter amount collected :-</p>
+	      <div class="input-group mb-3">
+  <span class="input-group-text" id="basic-addon1">₹</span>
+  <input type="text" class="form-control" name="totalAmountCollected" aria-describedby="basic-addon1">
+</div> 
+	      <button class="btn btn-primary" name="form2" value="form2">Return</button>
+	      {% if update==True %}
+	      <div class="alert alert-success" role="alert">
+  Returned Successfully
+</div>
+	      {% elif update==False %}
+	      <div class="alert alert-danger" role="alert">
+  Return of book not successful
+</div>
+{% endif %}
+	    </main>
+	    {% endfor %}
+	    </form>
+	</div>
+
+{% endblock %}

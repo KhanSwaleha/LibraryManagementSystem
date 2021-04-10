@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+	<div style="margin-top: 20px">
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for books.." title="Type in a name">
+		<table id="myTable" class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Book ID</th>
+      <th scope="col">Book name</th>
+      <th scope="col">Author</th>
+      <th scope="col">Average rating</th>
+      <th scope="col">Available quantity</th>
+      <th scope="col">Issue</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in results %}
+    <tr>
+      <th scope="row">{{ row[0] }}</th>
+      <td>{{ row[1] }}</td>
+      <td>{{ row[2] }}</td>
+      <td>{{ row[3] }}</td>
+      <td>{{ row[4] }}</td>
+      {% if row[4]>0 %}
+      <td>
+      	<a class="btn btn-primary" href="/issueBook/{{ row[0] }}" role="button">Issue</a>
+      </td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+	</div>
+
+  <script type="text/javascript">
+    function myFunction() {
+  var input, filter, table, tr, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 1; i < tr.length; i++) {
+    if (tr[i].textContent.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+        }       
+  }
+}
+  </script>
+{% endblock %}
