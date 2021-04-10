@@ -15,3 +15,9 @@ Transactions
 Reports
 ![image](https://user-images.githubusercontent.com/37205247/114266242-dd6e1500-9a12-11eb-8f64-5beccbddaf9b.png)
 ![image](https://user-images.githubusercontent.com/37205247/114266252-ebbc3100-9a12-11eb-87ae-d5629f5d8dc7.png)
+
+ER Diagram
+![image](https://user-images.githubusercontent.com/37205247/114268009-8cfbb500-9a1c-11eb-8065-a045cbb07510.png)
+
+Use Case
+![image](https://user-images.githubusercontent.com/37205247/114268155-4f4b5c00-9a1d-11eb-88bf-61502805765d.png)
