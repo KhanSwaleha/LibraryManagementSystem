@@ -3,7 +3,9 @@
 {% block body %}
 {% if exist == True %}
     <div id="books" style="margin-top: 20px; width: 100%; height: 500px"></div>
+    <button onclick="pdfB()">Save as pdf</button>
     <div id="member" style="margin-top: 50px; width: 100%; height: 500px"></div>
+    <button onclick="pdfM()">Save as pdf</button>
   {% endif %}
   {% if exist == False %}
   <div style="margin-top: 20px">
@@ -63,5 +65,13 @@
         memChart.container("member");
         memChart.draw();
       });
+
+        function pdfB() {
+            chart.saveAsPdf();  
+        };
+
+        function pdfM() {
+            memChart.saveAsPdf();  
+        };
     </script>
 {% endblock %}
